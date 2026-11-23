@@ -122,6 +122,13 @@ button {
   transform: rotate(90deg) translateY(-100%);
 }
 
+/* WebKit, inside the turned frame only, fails to paint some pieces of a right-to-left line that
+   is split by inline elements (slide 13 lost «و» and «بأنفسنا»). Isolating each inline element
+   makes it paint them all; the order of the words does not change. */
+.show--turned .slide :where(span, b, i, em, strong, a, mark) {
+  unicode-bidi: isolate;
+}
+
 /* React Bits Counter sizes its rolling digits from getBoundingClientRect(), which swaps width and
    height on the turned frame. Its hidden measuring row is turned back, so it reads true widths. */
 .show--turned .counter__measure {

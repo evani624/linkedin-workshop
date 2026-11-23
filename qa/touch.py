@@ -39,7 +39,7 @@ CONTROLS = r"""
     // how far the tappable area really reaches (it may be wider than the drawing)
     const mine = (px, py) => { const h = document.elementFromPoint(px, py); return !!h && el.contains(h); };
     const reach = (dx, dy) => { let d = 0; while (d < 40 && mine(x + dx * (d + 1), y + dy * (d + 1))) d += 1; return d; };
-    const span = Math.min(reach(1, 0) + reach(-1, 0), reach(0, 1) + reach(0, -1));
+    const span = Math.min(reach(1, 0) + reach(-1, 0), reach(0, 1) + reach(0, -1)) + 1; // + the centre pixel
     out.push({
       span,
       name: (el.getAttribute('aria-label') || el.textContent || el.className.baseVal || el.className).trim().slice(0, 30),
