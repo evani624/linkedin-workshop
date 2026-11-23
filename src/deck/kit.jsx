@@ -143,6 +143,60 @@ export function BigDial({ part, from, intro = false }) {
   );
 }
 
+// ---------- Arabic joining for Stroke Text ----------
+// Stroke Text puts every letter in its own <tspan> so it can draw them one after another.
+// Chromium and Firefox still shape the line as one run. WebKit (Safari, and every browser on
+// iOS) shapes each <tspan> alone: the letters lose their joined forms and the line grows by a
+// third, into whatever sits beside it. Where that happens the line is moved into its first
+// <tspan>, so it is shaped whole: it is drawn and inked as one piece instead of letter by letter,
+// and ends up looking the same as everywhere else.
+const SVG_NS = 'http://www.w3.org/2000/svg';
+
+let tspansShapeAlone;
+const shapesTspansAlone = () => {
+  if (tspansShapeAlone !== undefined) return tspansShapeAlone;
+  tspansShapeAlone = false;
+  try {
+    const svg = document.createElementNS(SVG_NS, 'svg');
+    svg.setAttribute('width', '10');
+    svg.setAttribute('height', '10');
+    svg.style.cssText = 'position:absolute;left:-9999px;top:0;visibility:hidden;font:100px sans-serif';
+    const line = split => {
+      const node = document.createElementNS(SVG_NS, 'text');
+      for (const piece of split ? ['ل', 'ي', 'ن'] : ['لين']) {
+        const span = document.createElementNS(SVG_NS, 'tspan');
+        span.textContent = piece;
+        node.appendChild(span);
+      }
+      svg.appendChild(node);
+      return node;
+    };
+    const whole = line(false);
+    const letters = line(true);
+    document.body.appendChild(svg);
+    const a = whole.getBBox().width;
+    const b = letters.getBBox().width;
+    svg.remove();
+    tspansShapeAlone = a > 0 && Math.abs(a - b) > a * 0.03;
+  } catch {
+    /* no SVG text measuring: leave the line as it is */
+  }
+  return tspansShapeAlone;
+};
+
+// Runs before the component's own measuring pass after fonts are ready (a microtask queued at
+// mount), so the line is sized from the joined letters.
+const joinLetters = root => {
+  root.querySelectorAll('text').forEach(node => {
+    const spans = [...node.children].filter(child => child.tagName === 'tspan');
+    if (spans.length < 2 || !spans[1].textContent) return;
+    const line = spans.map(span => span.textContent).join('');
+    spans.forEach((span, k) => {
+      span.textContent = k === 0 ? line : '';
+    });
+  });
+};
+
 // One line drawn as an outline and then inked in (React Bits, Stroke Text).
 // The component sizes itself to its box; this pins it to an exact size in stage units.
 export function StrokeLine({ text, size, color, wait = 0, weight = 700 }) {
@@ -158,6 +212,7 @@ export function StrokeLine({ text, size, color, wait = 0, weight = 700 }) {
   useLayoutEffect(() => {
     const svg = ref.current?.querySelector('svg');
     if (!svg) return undefined;
+    if (shapesTspansAlone()) joinLetters(svg);
     const fit = () => {
       const box = svg.viewBox.baseVal;
       if (!box || !box.width) return;
