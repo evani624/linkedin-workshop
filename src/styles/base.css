@@ -22,7 +22,19 @@ body,
   margin: 0;
 }
 
+html {
+  /* Phones: no zoom on a fast double tap, no text inflation when the phone is turned, no rubber band. */
+  touch-action: manipulation;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  overscroll-behavior: none;
+}
+
 body {
+  position: fixed;
+  inset: 0;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
   background: var(--charcoal);
   font-family: 'IBM Plex Sans Arabic', 'Segoe UI', Tahoma, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -77,24 +89,44 @@ button {
   display: inline-block;
 }
 
+/* The show fills the window, inside the notch and the home indicator. */
 .show {
-  position: absolute;
+  position: fixed;
   inset: 0;
+  padding: env(safe-area-inset-top, 0px) env(safe-area-inset-right, 0px) env(safe-area-inset-bottom, 0px) env(safe-area-inset-left, 0px);
+  container-type: size;
+  background: var(--stage-surround, #0A0E0C);
+}
+
+.show__frame {
+  position: relative;
+  width: 100%;
+  height: 100%;
   container-type: size;
 }
 
-/* An upright phone: lay the whole show on its side, so tilting the phone gives a full-screen slide. */
-.show--turned {
-  position: fixed;
-  inset: auto;
-  top: 0;
-  left: 0;
-  width: 100vh;
-  width: 100dvh;
-  height: 100vw;
-  height: 100dvw;
+.show__body {
+  position: absolute;
+  inset: 0;
+}
+
+/* An upright phone: lay the frame on its side, so tilting the phone gives a full-screen slide.
+   Its size comes from the show's own box (not from vh/dvh), so it follows the address bar. */
+.show--turned .show__frame {
+  position: absolute;
+  top: env(safe-area-inset-top, 0px);
+  left: env(safe-area-inset-left, 0px);
+  width: 100cqh;
+  height: 100cqw;
   transform-origin: top left;
   transform: rotate(90deg) translateY(-100%);
+}
+
+/* React Bits Counter sizes its rolling digits from getBoundingClientRect(), which swaps width and
+   height on the turned frame. Its hidden measuring row is turned back, so it reads true widths. */
+.show--turned .counter__measure {
+  transform-origin: top left;
+  transform: rotate(-90deg);
 }
 
 /* Small helper bar that shows when the pointer moves over a slide. */
@@ -158,33 +190,76 @@ button {
   stroke-linejoin: round;
 }
 
-.hud__back {
-  display: none !important;
+.hud .hud__touch {
+  display: none;
 }
 
-/* Touch screens have no arrow keys: keep three small round buttons on the left edge. */
+/* Touch screens have no arrow keys and no hover. The controls get a rail of their own beside the
+   slide, so they never sit on top of it: under the slide when the screen is narrower than 16:9,
+   to its left when it is wider (where the dark band would be anyway). */
 @media (pointer: coarse) {
-  /* Centred in the dark band beside the slide when there is one, else tight against the edge. */
+  .show__body {
+    --rail: 52px;
+    display: grid;
+    direction: ltr;
+    grid-template: 'stage' minmax(0, 1fr) 'rail' var(--rail) / minmax(0, 1fr);
+  }
+
+  .show__body > .viewport {
+    grid-area: stage;
+    position: relative;
+    inset: auto;
+    min-width: 0;
+    min-height: 0;
+  }
+
   .hud {
-    inset-block-start: 50%;
-    inset-inline-end: max(2px, calc((100cqw - 100cqh * 16 / 9) / 4 - 18px));
-    transform: translateY(-50%);
-    flex-direction: column;
-    gap: 10px;
-    opacity: 0.7;
-    pointer-events: auto;
-  }
-
-  .hud button {
-    width: 36px;
-    height: 36px;
-    padding: 0;
+    grid-area: rail;
+    position: static;
+    inset: auto;
     justify-content: center;
+    align-items: center;
+    gap: clamp(10px, 4cqw, 28px);
+    opacity: 1;
+    pointer-events: auto;
+    transition: none;
   }
 
-  .hud svg {
-    width: 18px;
-    height: 18px;
+  @container (min-aspect-ratio: 16 / 9) {
+    .show__body {
+      /* A matching empty column on the right keeps the slide in the middle of the screen. */
+    grid-template: 'rail stage .' minmax(0, 1fr) / var(--rail) minmax(0, 1fr) var(--rail);
+    }
+
+    .hud {
+      flex-direction: column;
+      gap: clamp(6px, 4cqh, 28px);
+    }
+  }
+
+  .hud button,
+  .hud .hud__touch {
+    display: flex;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    background: rgba(255, 255, 255, 0.1);
+    color: #E8EEEC;
+    backdrop-filter: none;
+    touch-action: manipulation;
+  }
+
+  .hud button:hover {
+    background: rgba(255, 255, 255, 0.1);
+  }
+
+  .hud button:active {
+    background: rgba(255, 255, 255, 0.26);
+  }
+
+  .hud button:disabled {
+    opacity: 0.3;
   }
 
   .hud button span {
@@ -193,10 +268,6 @@ button {
 
   .hud svg {
     display: block;
-  }
-
-  .hud__back {
-    display: flex !important;
   }
 }
 

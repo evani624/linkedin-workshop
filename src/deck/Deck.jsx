@@ -15,7 +15,8 @@ const fromHash = () => {
 };
 
 // A phone held upright: the slide is turned on its side so it fills the screen once the phone is tilted.
-const UPRIGHT_PHONE = '(orientation: portrait) and (max-width: 820px)';
+// Phones only: a tablet or a narrow desktop window keeps the slide the right way up.
+const UPRIGHT_PHONE = '(orientation: portrait) and (max-width: 600px) and (pointer: coarse)';
 const useTurned = () => {
   const [turned, setTurned] = useState(() => typeof matchMedia !== 'undefined' && matchMedia(UPRIGHT_PHONE).matches);
   useEffect(() => {
@@ -27,6 +28,28 @@ const useTurned = () => {
   return turned;
 };
 
+// The build step of the slide we were on, so a reload (or the browser throwing the page away
+// while the phone sleeps) comes back to the same press. Kept for this tab only.
+const STEP_KEY = 'deck:step';
+const savedStep = at => {
+  try {
+    const [n, step] = (sessionStorage.getItem(STEP_KEY) || '').split(':').map(Number);
+    const slide = SLIDES[at];
+    return slide && n === slide.n && step > 0 && step <= slide.steps ? step : 0;
+  } catch {
+    return 0;
+  }
+};
+
+// Fullscreen is missing on iPhone and prefixed on older iPad Safari.
+const canFullscreen = () => {
+  if (typeof document === 'undefined') return false;
+  const el = document.documentElement;
+  if (el.requestFullscreen) return document.fullscreenEnabled !== false;
+  return Boolean(el.webkitRequestFullscreen && document.webkitFullscreenEnabled !== false);
+};
+const fullscreenElement = () => document.fullscreenElement || document.webkitFullscreenElement || null;
+
 const Icon = ({ d }) => (
   <svg viewBox="0 0 24 24" aria-hidden="true">
     <path d={d} />
@@ -36,8 +59,9 @@ const Icon = ({ d }) => (
 export function Deck() {
   const turned = useTurned();
   const [index, setIndex] = useState(fromHash); // -1 = the list of slides
-  const [step, setStep] = useState(0);
+  const [step, setStep] = useState(() => savedStep(fromHash()));
   const [hud, setHud] = useState(false);
+  const [fullscreen] = useState(canFullscreen);
   const hudTimer = useRef(0);
   const slide = SLIDES[Math.max(0, index)];
 
@@ -66,10 +90,20 @@ export function Deck() {
     return undefined;
   }, [index, step, open]);
 
+  useEffect(() => {
+    try {
+      if (index >= 0) sessionStorage.setItem(STEP_KEY, `${SLIDES[index].n}:${step}`);
+    } catch {
+      /* private mode: the step is simply not remembered */
+    }
+  }, [index, step]);
+
   const toggleFullscreen = useCallback(() => {
     try {
-      if (document.fullscreenElement) document.exitFullscreen?.();
-      else document.documentElement.requestFullscreen?.().catch(() => {});
+      const el = document.documentElement;
+      if (fullscreenElement()) (document.exitFullscreen || document.webkitExitFullscreen)?.call(document);
+      else if (el.requestFullscreen) el.requestFullscreen().catch(() => {});
+      else el.webkitRequestFullscreen?.();
     } catch {
       /* some frames refuse fullscreen; the deck still fills the window */
     }
@@ -90,7 +124,7 @@ export function Deck() {
         event.preventDefault();
         back();
       } else if (key === 'Escape') {
-        if (!document.fullscreenElement) open(index < 0 ? 0 : -1);
+        if (!fullscreenElement()) open(index < 0 ? 0 : -1);
       } else if (key === 'f' || key === 'F' || key === 'ب') {
         toggleFullscreen();
       } else if (key === 'Home') {
@@ -124,35 +158,51 @@ export function Deck() {
   const Slide = slide.Component;
   return (
     <div className={`show${turned ? ' show--turned' : ''}`} onPointerMove={showHud} onPointerDown={showHud}>
-      <Stage
-        onClick={event => {
-          // A click on a control inside the slide belongs to that control, not to "next".
-          if (event.target.closest?.('button, a, input, select, textarea, [role="option"], [data-hold]')) return;
-          forward();
-        }}
-      >
-        <div className="deck" style={{ '--acc': part.deep }}>
-          <Bar part={part} n={slide.n} total={TOTAL} hidden={slide.bare} />
-          <Slide key={slide.n} step={step} />
+      <div className="show__frame">
+        <div className="show__body">
+          <Stage
+            onClick={event => {
+              // A click on a control inside the slide belongs to that control, not to "next".
+              if (event.target.closest?.('button, a, input, select, textarea, [role="option"], [data-hold]')) return;
+              forward();
+            }}
+          >
+            <div className="deck" style={{ '--acc': part.deep }}>
+              <Bar part={part} n={slide.n} total={TOTAL} hidden={slide.bare} />
+              <Slide key={slide.n} step={step} />
+            </div>
+          </Stage>
+          {/* With a mouse: three pills that show when the pointer moves. On a touch screen: a rail
+              beside the slide, never on top of it. */}
+          <div className={`hud${hud ? ' hud--on' : ''}`}>
+            <button type="button" className="hud__touch" onClick={back} disabled={index === 0 && step === 0} aria-label="الخطوة السابقة">
+              <Icon d="M9 5l7 7-7 7" />
+            </button>
+            <button
+              type="button"
+              className="hud__touch"
+              onClick={forward}
+              disabled={index === SLIDES.length - 1 && step >= slide.steps}
+              aria-label="الخطوة التالية"
+            >
+              <Icon d="M15 5l-7 7 7 7" />
+            </button>
+            <button type="button" onClick={() => open(-1)} aria-label="كل الشرائح">
+              <Icon d="M4 6h16M4 12h16M4 18h16" />
+              <span>
+                كل الشرائح <kbd>Esc</kbd>
+              </span>
+            </button>
+            {fullscreen && (
+              <button type="button" onClick={toggleFullscreen} aria-label="ملء الشاشة">
+                <Icon d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5" />
+                <span>
+                  ملء الشاشة <kbd>F</kbd>
+                </span>
+              </button>
+            )}
+          </div>
         </div>
-      </Stage>
-      <div className={`hud${hud ? ' hud--on' : ''}`}>
-        <button type="button" className="hud__back" onClick={back} aria-label="الخطوة السابقة">
-          <Icon d="M9 5l7 7-7 7" />
-          <span>السابق</span>
-        </button>
-        <button type="button" onClick={() => open(-1)} aria-label="كل الشرائح">
-          <Icon d="M4 6h16M4 12h16M4 18h16" />
-          <span>
-            كل الشرائح <kbd>Esc</kbd>
-          </span>
-        </button>
-        <button type="button" onClick={toggleFullscreen} aria-label="ملء الشاشة">
-          <Icon d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5" />
-          <span>
-            ملء الشاشة <kbd>F</kbd>
-          </span>
-        </button>
       </div>
     </div>
   );
