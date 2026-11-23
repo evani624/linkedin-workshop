@@ -1,0 +1,23 @@
+{
+  "name": "linkedin-workshop-deck",
+  "version": "1.0.0",
+  "private": true,
+  "description": "«لينكدإن على طريقتك»: a 31-slide interactive workshop deck (Arabic, RTL), built to static files.",
+  "scripts": {
+    "fonts": "node tools/gen_fonts.mjs",
+    "qr": "node tools/gen_qr.mjs",
+    "bundle": "node build.mjs",
+    "build": "node tools/gen_fonts.mjs && node tools/gen_qr.mjs && node build.mjs",
+    "dev": "node build.mjs --dev"
+  },
+  "dependencies": {
+    "@fontsource-variable/readex-pro": "5.3.0",
+    "@fontsource/ibm-plex-mono": "5.3.0",
+    "@fontsource/ibm-plex-sans-arabic": "5.3.0",
+    "esbuild": "0.28.2",
+    "gsap": "3.13.0",
+    "qrcode-generator": "1.5.2",
+    "react": "19.3.1",
+    "react-dom": "19.3.1"
+  }
+}

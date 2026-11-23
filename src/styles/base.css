@@ -1,0 +1,211 @@
+/* Rakaya: teal #0C3B40 and charcoal #222B25, measured from the official mark.
+   Layout idea: every slide is a 1920x1080 grid written in stage units (u). */
+:root {
+  --teal: #0C3B40;
+  --charcoal: #222B25;
+  --paper: #F3F5F4;
+  --white: #FFFFFF;
+  --u: calc(100cqw / 1920);
+  color-scheme: only light;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  background: var(--charcoal);
+  font-family: 'IBM Plex Sans Arabic', 'Segoe UI', Tahoma, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow: hidden;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+}
+
+/* The window, then the 16:9 slide inside it. */
+.viewport {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  container-type: size;
+  background: var(--stage-surround, #0A0E0C);
+}
+
+.stage {
+  position: relative;
+  width: min(100cqw, calc(100cqh * 16 / 9));
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  container-type: size;
+}
+
+.slide {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  direction: rtl;
+  font-variant-numeric: tabular-nums;
+  cursor: default;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* Zero specificity, so a slide's own spacing rules always win. */
+:where(.slide) :where(h1, h2, h3, p) {
+  margin: 0;
+}
+
+/* Latin runs and digits inside Arabic lines. */
+.ltr {
+  direction: ltr;
+  unicode-bidi: isolate;
+  display: inline-block;
+}
+
+.show {
+  position: absolute;
+  inset: 0;
+  container-type: size;
+}
+
+/* An upright phone: lay the whole show on its side, so tilting the phone gives a full-screen slide. */
+.show--turned {
+  position: fixed;
+  inset: auto;
+  top: 0;
+  left: 0;
+  width: 100vh;
+  width: 100dvh;
+  height: 100vw;
+  height: 100dvw;
+  transform-origin: top left;
+  transform: rotate(90deg) translateY(-100%);
+}
+
+/* Small helper bar that shows when the pointer moves over a slide. */
+.hud {
+  position: absolute;
+  inset-block-start: 14px;
+  inset-inline-end: 14px;
+  z-index: 50;
+  display: flex;
+  gap: 8px;
+  direction: rtl;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+  pointer-events: none;
+}
+
+.hud--on {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.hud button {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  border: 0;
+  border-radius: 999px;
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  background: rgba(10, 14, 12, 0.72);
+  color: #fff;
+  cursor: pointer;
+  backdrop-filter: blur(6px);
+}
+
+.hud button:hover {
+  background: rgba(10, 14, 12, 0.92);
+}
+
+.hud button:focus-visible {
+  outline: 2px solid #5EE0EF;
+  outline-offset: 2px;
+}
+
+.hud kbd {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px;
+  opacity: 0.7;
+  margin-inline-start: 6px;
+}
+
+.hud svg {
+  display: none;
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.hud__back {
+  display: none !important;
+}
+
+/* Touch screens have no arrow keys: keep three small round buttons on the left edge. */
+@media (pointer: coarse) {
+  /* Centred in the dark band beside the slide when there is one, else tight against the edge. */
+  .hud {
+    inset-block-start: 50%;
+    inset-inline-end: max(2px, calc((100cqw - 100cqh * 16 / 9) / 4 - 18px));
+    transform: translateY(-50%);
+    flex-direction: column;
+    gap: 10px;
+    opacity: 0.7;
+    pointer-events: auto;
+  }
+
+  .hud button {
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    justify-content: center;
+  }
+
+  .hud svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .hud button span {
+    display: none;
+  }
+
+  .hud svg {
+    display: block;
+  }
+
+  .hud__back {
+    display: flex !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .slide *,
+  .slide *::before,
+  .slide *::after {
+    animation-duration: 0.001s !important;
+    animation-delay: 0s !important;
+    transition-duration: 0.001s !important;
+  }
+}

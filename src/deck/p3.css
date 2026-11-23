@@ -1,0 +1,726 @@
+/* Slides 22 to 31: التشريح، وش تنشر ووش تخلي، التطبيق، الختام */
+
+/* Small pager: which point of the slide is on screen. */
+.game__dots,
+.s26__dots {
+  display: flex;
+  gap: 12u;
+}
+
+.deck .game__dots button,
+.deck .s26__dots button {
+  width: 44u;
+  height: 12u;
+  border-radius: 6u;
+  background: rgba(12, 59, 64, 0.16);
+  transition: width 0.4s ease, background-color 0.4s ease, opacity 0.4s ease;
+}
+
+.deck .game__dots button.is-on,
+.deck .s26__dots button.is-on {
+  width: 76u;
+  background: var(--acc);
+}
+
+.deck .s26__dots button.is-seen {
+  background: rgba(12, 59, 64, 0.45);
+}
+
+.deck .game__dots button:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+/* ---------- 22 ---------- */
+.s22__same {
+  position: absolute;
+  left: 96u;
+  right: 96u;
+  top: 320u;
+  font-size: 84u;
+  font-weight: 700;
+  line-height: 1.4;
+  color: var(--ink);
+}
+
+.s22__ask {
+  position: absolute;
+  left: 96u;
+  right: 96u;
+  top: 500u;
+  font-size: 128u;
+  font-weight: 700;
+  line-height: 1.3;
+  color: var(--acc);
+}
+
+.s22__hide {
+  position: absolute;
+  right: 96u;
+  top: 810u;
+  display: flex;
+  align-items: center;
+  gap: 24u;
+  font-size: 44u;
+  font-weight: 500;
+  color: var(--soft);
+}
+
+.s22__ava {
+  width: 72u;
+  height: 72u;
+  border-radius: 50%;
+  border: 2u solid var(--rule);
+  background: repeating-linear-gradient(45deg, rgba(12, 59, 64, 0.16) 0 3u, transparent 3u 11u);
+}
+
+/* ---------- 23 and 24: the guessing game ---------- */
+.game__ask {
+  position: absolute;
+  left: 96u;
+  top: 178u;
+  font-size: 40u;
+  font-weight: 500;
+  color: var(--acc);
+  white-space: nowrap;
+  transition: opacity 0.5s ease;
+}
+
+.game__ask.is-off {
+  opacity: 0;
+}
+
+.game__arena {
+  position: absolute;
+  left: 96u;
+  right: 96u;
+  top: 296u;
+  height: 680u;
+  display: grid;
+  grid-template-columns: 720u 288u 720u;
+}
+
+.game__side {
+  display: grid;
+  align-content: start;
+  justify-items: center;
+  text-align: center;
+}
+
+.game__name {
+  font-size: 44u;
+  font-weight: 600;
+  line-height: 1.4;
+  color: var(--ink);
+}
+
+.game__score {
+  display: flex;
+  align-items: baseline;
+  gap: 20u;
+  height: 212u;
+  margin-top: 4u;
+  font-size: 200u;
+  font-weight: 500;
+  line-height: 1;
+  color: var(--ink);
+}
+
+.game__side.is-lead .game__score {
+  color: var(--acc);
+}
+
+.game__q {
+  font-weight: 700;
+  line-height: 1;
+  color: rgba(12, 59, 64, 0.26);
+}
+
+.game__unit {
+  font-family: 'IBM Plex Sans Arabic', sans-serif;
+  font-size: 40u;
+  font-weight: 500;
+  color: var(--soft);
+}
+
+.game__more {
+  min-height: 60u;
+  margin-top: 6u;
+  font-size: 40u;
+  color: var(--soft);
+}
+
+.game__val {
+  margin-top: 40u;
+  font-size: 54u;
+  font-weight: 600;
+  line-height: 1.5;
+  color: var(--ink);
+  animation: in 0.5s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+.game__mid {
+  display: grid;
+  justify-items: center;
+  align-content: start;
+  padding-top: 74u;
+}
+
+.game__dial {
+  width: 210u;
+  height: 210u;
+}
+
+.game__dial .compass {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.game__label {
+  margin-top: 96u;
+  font-size: 40u;
+  font-weight: 600;
+  line-height: 1.4;
+  color: var(--quiet);
+  white-space: nowrap;
+  animation: in 0.5s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+.game__label.is-why {
+  color: var(--acc);
+}
+
+.game__dots {
+  margin-top: 16u;
+}
+
+.deck .game__dots button {
+  width: 14u;
+  height: 14u;
+  border-radius: 50%;
+}
+
+.deck .game__dots button.is-on {
+  width: 14u;
+}
+
+/* ---------- 25: the cohort chart ---------- */
+.s25__chart {
+  position: absolute;
+  left: 96u;
+  top: 300u;
+  width: 860u;
+  height: 640u;
+  direction: ltr;
+  overflow: visible;
+  transition: opacity 0.6s ease;
+}
+
+.s25__grid {
+  stroke: rgba(12, 59, 64, 0.12);
+  stroke-width: 1.5;
+}
+
+.s25__base {
+  stroke: rgba(12, 59, 64, 0.45);
+  stroke-width: 2;
+}
+
+.s25__tick {
+  font: 400 22px 'IBM Plex Mono', monospace;
+  fill: #5F6F70;
+}
+
+.s25__hit {
+  fill: transparent;
+}
+
+.s25__col {
+  fill: #7B9496;
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+  animation: s25-grow 0.9s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  animation-delay: calc(var(--d) * 1s);
+  transition: fill 0.5s ease;
+}
+
+@keyframes s25-grow {
+  from {
+    transform: scaleY(0);
+  }
+}
+
+.s25__bar {
+  outline: none;
+}
+
+.s25__bar.is-me .s25__col {
+  fill: #0C3B40;
+}
+
+.s25__bar.is-hot .s25__col {
+  fill: var(--acc);
+}
+
+.s25__bar:focus-visible .s25__col {
+  stroke: #0C3B40;
+  stroke-width: 3;
+}
+
+.s25__val {
+  font: 500 30px 'IBM Plex Mono', monospace;
+  fill: #222B25;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.s25__bar.is-lab .s25__val,
+.s25__bar:hover .s25__val,
+.s25__bar:focus-visible .s25__val {
+  opacity: 1;
+}
+
+.s25__me {
+  font: 600 32px 'Readex Pro', sans-serif;
+  fill: #0C3B40;
+}
+
+.s25__say {
+  position: absolute;
+  right: 96u;
+  top: 384u;
+  width: 760u;
+  font-size: 60u;
+  font-weight: 600;
+  line-height: 1.5;
+  color: var(--ink);
+  animation: in 0.5s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  transition: opacity 0.4s ease;
+}
+
+.s25__sum {
+  position: absolute;
+  left: 96u;
+  right: 96u;
+  top: 490u;
+  text-align: center;
+  white-space: nowrap;
+  font-size: 88u;
+  font-weight: 700;
+  line-height: 1.3;
+  color: var(--ink);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(20u);
+  transition: opacity 0.6s ease 0.25s, transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) 0.25s, visibility 0s linear 0.6s;
+}
+
+.s25__sum .mono {
+  font-weight: 500;
+  margin: 0 10u;
+}
+
+.is-end .s25__chart,
+.is-end .s25__say {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.is-end .s25__sum {
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+  transition-delay: 0.25s, 0.25s, 0s;
+}
+
+.sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* ---------- 26: the boundary ---------- */
+.s26__line {
+  position: absolute;
+  left: 50%;
+  top: 300u;
+  bottom: 150u;
+  border-left: 4u dashed rgba(12, 59, 64, 0.4);
+}
+
+.s26__line::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 10u;
+  width: 24u;
+  background: repeating-linear-gradient(45deg, rgba(12, 59, 64, 0.22) 0 3u, transparent 3u 11u);
+}
+
+.s26__rows {
+  transition: opacity 0.4s ease;
+}
+
+.s26__rows.is-off {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.s26__head {
+  position: absolute;
+  top: 372u;
+  width: 760u;
+  font-size: 48u;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.s26__head--yes {
+  right: 96u;
+  color: var(--acc);
+}
+
+.s26__head--no {
+  right: 1064u;
+  color: var(--soft);
+}
+
+.s26__val {
+  position: absolute;
+  top: 468u;
+  width: 760u;
+  font-size: 72u;
+  font-weight: 700;
+  line-height: 1.4;
+  color: var(--ink);
+  animation: in 0.5s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+.s26__val--yes {
+  right: 96u;
+}
+
+.s26__val--no {
+  right: 1064u;
+  animation-delay: 0.18s;
+}
+
+.s26__dots {
+  position: absolute;
+  right: 96u;
+  top: 318u;
+}
+
+.s26__doubt {
+  position: absolute;
+  left: 96u;
+  right: 96u;
+  top: 520u;
+  display: flex;
+  justify-content: center;
+}
+
+.s26__doubt span {
+  padding: 28u 60u;
+  border-radius: 999u;
+  background: var(--ink);
+  font-size: 68u;
+  font-weight: 700;
+  line-height: 1.3;
+  color: #fff;
+  white-space: nowrap;
+}
+
+.s26__last {
+  display: grid;
+  align-content: center;
+  gap: 14u;
+  padding: 150u 96u 0;
+  font-size: 104u;
+  font-weight: 700;
+  line-height: 1.3;
+  color: var(--ink);
+}
+
+/* ---------- 27 and 28 ---------- */
+.drill__list--plain li {
+  position: relative;
+  grid-template-columns: 1fr;
+  row-gap: 22u;
+  padding-inline-start: 58u;
+}
+
+.drill__list--plain li::before {
+  content: '';
+  position: absolute;
+  inset-inline-start: 0;
+  top: 36u;
+  width: 28u;
+  height: 6u;
+  border-radius: 3u;
+  background: var(--acc);
+}
+
+.drill__chips {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16u;
+  font-size: 44u;
+}
+
+.drill__chips i {
+  padding: 6u 26u;
+  border: 2u solid var(--acc);
+  border-radius: 14u;
+  background: var(--sheet);
+  font-style: normal;
+  font-weight: 600;
+}
+
+.drill__chips b {
+  font-weight: 500;
+  color: var(--acc);
+}
+
+.drill__chips--small {
+  gap: 10u;
+  font-size: 28u;
+  flex-wrap: nowrap;
+}
+
+.drill__chips--small i {
+  padding: 4u 16u;
+  white-space: nowrap;
+  border-color: var(--rule);
+  font-weight: 500;
+  color: var(--soft);
+}
+
+/* ---------- 29 ---------- */
+.s29__do {
+  position: absolute;
+  left: 96u;
+  right: 96u;
+  top: 290u;
+  font-size: 60u;
+  font-weight: 600;
+  line-height: 1.4;
+  color: var(--ink);
+}
+
+.s29__label {
+  position: absolute;
+  right: 96u;
+  top: 424u;
+  font-size: 44u;
+  font-weight: 600;
+  color: var(--acc);
+}
+
+.s29__list {
+  position: absolute;
+  left: 96u;
+  right: 96u;
+  top: 516u;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 26u;
+}
+
+.deck .s29__list button {
+  display: flex;
+  align-items: center;
+  gap: 28u;
+  border-radius: 14u;
+  font-size: 54u;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.s29__list svg {
+  flex: none;
+  width: 66u;
+  height: 66u;
+}
+
+.s29__list rect {
+  fill: var(--sheet);
+  stroke: rgba(12, 59, 64, 0.5);
+  stroke-width: 3;
+  transition: fill 0.3s ease, stroke 0.3s ease;
+}
+
+.s29__list path {
+  fill: none;
+  stroke: #fff;
+  stroke-width: 5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 100;
+  stroke-dashoffset: 100;
+  transition: stroke-dashoffset 0.4s ease 0.1s;
+}
+
+.s29__list .is-done rect {
+  fill: var(--acc);
+  stroke: var(--acc);
+}
+
+.s29__list .is-done path {
+  stroke-dashoffset: 0;
+}
+
+/* ---------- QR ---------- */
+.qrcard {
+  display: grid;
+  justify-items: center;
+  gap: 8u;
+  padding: 22u;
+  border: 2u solid var(--rule);
+  border-radius: 26u;
+  background: #fff;
+}
+
+.qr {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* ---------- 30 ---------- */
+.s30__list {
+  position: absolute;
+  left: 96u;
+  right: 96u;
+  top: 300u;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 40u;
+  font-size: 64u;
+  font-weight: 600;
+  line-height: 1.45;
+  color: var(--ink);
+}
+
+.s30__list.has-qr {
+  left: 560u;
+}
+
+.s30__list .mono {
+  font-weight: 500;
+}
+
+.s30__qr {
+  position: absolute;
+  left: 96u;
+  top: 300u;
+  width: 400u;
+}
+
+.s30__tape {
+  position: absolute;
+  left: 96u;
+  top: 810u;
+  width: 1728u;
+  height: 140u;
+  overflow: visible;
+}
+
+.s30__base,
+.s30__day {
+  fill: none;
+  stroke: rgba(12, 59, 64, 0.3);
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+
+.s30__day.is-major {
+  stroke: rgba(12, 59, 64, 0.5);
+  stroke-width: 2.5;
+}
+
+.s30__post {
+  fill: var(--acc);
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: s30-pop 0.6s cubic-bezier(0.3, 1.5, 0.5, 1) both;
+  animation-delay: calc(0.8s + var(--d, 0) * 1s);
+}
+
+@keyframes s30-pop {
+  from {
+    transform: scale(0);
+  }
+}
+
+.s30__note {
+  fill: var(--ink);
+  opacity: 0;
+  transform-box: fill-box;
+  transform-origin: center;
+  transform: scale(0);
+  transition: transform 0.5s cubic-bezier(0.3, 1.5, 0.5, 1), opacity 0.3s ease;
+  transition-delay: calc(var(--d) * 1s);
+}
+
+.s30__note.is-on {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.s30__flag {
+  fill: none;
+  stroke: var(--acc);
+  stroke-width: 5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.s30__flag.is-on {
+  opacity: 1;
+}
+
+/* ---------- 31 ---------- */
+.s31__text {
+  position: absolute;
+  right: 96u;
+  top: 336u;
+  width: 1200u;
+  display: grid;
+  gap: 8u;
+}
+
+.s31__qr {
+  position: absolute;
+  left: 96u;
+  top: 290u;
+  width: 480u;
+}
+
+.s31__qr p {
+  margin: 4u 0 2u;
+  font-size: 22u;
+  color: var(--soft);
+}
+
+.s31__by {
+  position: absolute;
+  right: 96u;
+  bottom: 62u;
+  font-size: 32u;
+  font-weight: 500;
+  color: var(--soft);
+  animation: fade 0.8s ease 1.8s both;
+}

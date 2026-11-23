@@ -1,0 +1,518 @@
+/* «لينكدإن على طريقتك» in the direction «الخريطة»: paper ground, teal ink, charcoal text,
+   and one deep accent per part (--acc) whose hue is the part's compass bearing.
+   Display: Readex Pro. Text: IBM Plex Sans Arabic. Figures: IBM Plex Mono.
+   Grid: 1920x1080 stage units, 96u margins, bar at 46u, title at 158u, content from 286u. */
+@property --acc {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: #00717B;
+}
+
+.deck {
+  --ground: #F3F5F4;
+  --sheet: #FFFFFF;
+  --ink: #0C3B40;
+  --text: #222B25;
+  --soft: #46524C;
+  --quiet: #5F6F70;
+  --rule: rgba(12, 59, 64, 0.2);
+  --hair: rgba(12, 59, 64, 0.1);
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  direction: rtl;
+  background: var(--ground);
+  color: var(--text);
+  font-family: 'IBM Plex Sans Arabic', 'Segoe UI', Tahoma, sans-serif;
+  transition: --acc 0.8s ease;
+}
+
+.deck .slide {
+  background: transparent;
+}
+
+.deck button {
+  border: 0;
+  padding: 0;
+  margin: 0;
+  background: none;
+  font: inherit;
+  color: inherit;
+  text-align: inherit;
+  cursor: pointer;
+}
+
+.deck button:focus-visible {
+  outline: 3u solid var(--acc);
+  outline-offset: 4u;
+}
+
+.dsp {
+  font-family: 'Readex Pro', 'IBM Plex Sans Arabic', sans-serif;
+}
+
+.mono {
+  font-family: 'IBM Plex Mono', ui-monospace, monospace;
+}
+
+.acc {
+  color: var(--acc);
+}
+
+/* ---------- The bar: Rakaya's mark, the part's name, the nine stops, the page ---------- */
+.bar {
+  position: absolute;
+  z-index: 5;
+  left: 96u;
+  right: 96u;
+  top: 46u;
+  height: 88u;
+  display: flex;
+  align-items: center;
+  gap: 40u;
+  transition: opacity 0.5s ease;
+}
+
+.bar.is-off {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.bar__chip {
+  display: flex;
+  align-items: center;
+  gap: 18u;
+}
+
+.bar__mark {
+  width: 80u;
+  height: 80u;
+}
+
+.bar__name {
+  font-family: 'Readex Pro', sans-serif;
+  font-size: 28u;
+  font-weight: 500;
+  color: var(--acc);
+  white-space: nowrap;
+  animation: bar-name 0.7s ease both;
+}
+
+@keyframes bar-name {
+  from {
+    opacity: 0;
+    transform: translateX(18u);
+  }
+}
+
+.bar__tape {
+  position: relative;
+  flex: 1;
+  height: 2u;
+  background: rgba(12, 59, 64, 0.13);
+}
+
+.bar__stop {
+  position: absolute;
+  top: -5u;
+  inset-inline-start: calc(var(--k) * 12.5% - 1u);
+  width: 2u;
+  height: 12u;
+  background: rgba(12, 59, 64, 0.22);
+  transition: background-color 0.6s ease;
+}
+
+.bar__stop.is-done {
+  background: rgba(12, 59, 64, 0.6);
+}
+
+.bar__dot {
+  position: absolute;
+  top: -8u;
+  inset-inline-start: calc(var(--i) * 12.5% - 9u);
+  width: 18u;
+  height: 18u;
+  border-radius: 50%;
+  background: var(--acc);
+  box-shadow: 0 0 0 6u var(--ground);
+  transition: inset-inline-start 0.9s cubic-bezier(0.3, 1.25, 0.4, 1);
+}
+
+.bar__page {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 26u;
+  font-weight: 500;
+  color: var(--quiet);
+  min-width: 124u;
+  text-align: left;
+}
+
+/* ---------- Shared slide furniture ---------- */
+.ttl {
+  position: absolute;
+  left: 96u;
+  right: 96u;
+  top: 158u;
+  font-family: 'Readex Pro', 'IBM Plex Sans Arabic', sans-serif;
+  font-weight: 700;
+  font-size: 64u;
+  line-height: 1.25;
+  color: var(--ink);
+  animation: in 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+.src {
+  position: absolute;
+  left: 96u;
+  right: 96u;
+  bottom: 28u;
+  font-size: 24u;
+  line-height: 1.45;
+  color: var(--quiet);
+  animation: fade 0.8s ease 0.6s both;
+}
+
+.sheet {
+  background: var(--sheet);
+  border: 2u solid var(--rule);
+  border-radius: 22u;
+}
+
+.in {
+  animation: in 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  animation-delay: calc(var(--d, 0) * 1s);
+}
+
+@keyframes in {
+  from {
+    opacity: 0;
+    transform: translateY(22u);
+  }
+}
+
+@keyframes fade {
+  from {
+    opacity: 0;
+  }
+}
+
+/* One view of a slide: only the view whose step it is shows, the others leave the stage. */
+.vw {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(20u);
+  transition: opacity 0.45s ease, transform 0.6s cubic-bezier(0.2, 0.7, 0.2, 1), visibility 0s linear 0.45s;
+  pointer-events: none;
+}
+
+.vw.is-on {
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+  transition-delay: 0.2s, 0.2s, 0s;
+  pointer-events: auto;
+}
+
+/* Shown when its build step arrives. */
+.rv {
+  opacity: 0;
+  transform: translateY(18u);
+  transition: opacity 0.55s ease, transform 0.6s cubic-bezier(0.2, 0.7, 0.2, 1);
+  transition-delay: calc(var(--d, 0) * 1s);
+  pointer-events: none;
+}
+
+.rv.is-on {
+  opacity: 1;
+  transform: none;
+  pointer-events: auto;
+}
+
+/* ---------- The big dial (slides 1, 4 and 31) ---------- */
+.dial {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.dial__card {
+  transition: transform 1.3s cubic-bezier(0.3, 1.3, 0.4, 1);
+}
+
+.dial__card--intro {
+  animation: dial-card 1.6s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+@keyframes dial-card {
+  from {
+    rotate: -70deg;
+    opacity: 0;
+  }
+}
+
+.dial__rose {
+  position: absolute;
+  left: 58u;
+  top: 240u;
+  width: 600u;
+  height: 600u;
+  animation: fade 0.9s ease both;
+}
+
+.dial__rose .compass {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.dial__wheel {
+  position: absolute;
+  inset: 0;
+  direction: ltr;
+  font-family: 'Readex Pro', 'IBM Plex Sans Arabic', sans-serif;
+  animation: fade 0.9s ease 0.5s both;
+}
+
+.dial__wheel .option-wheel,
+.dial__wheel .option-wheel__item {
+  cursor: default;
+}
+
+.dial__wheel .option-wheel__item {
+  font-weight: 400;
+}
+
+.dial__wheel .option-wheel__item--selected {
+  font-weight: 600;
+}
+
+.stroke {
+  display: block;
+}
+
+.stroke .stroke-text {
+  width: auto;
+}
+
+.mark-loop {
+  transition: fill 0.5s ease, opacity 0.5s ease;
+}
+
+/* ---------- Timer ---------- */
+.timer {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  gap: 18u;
+}
+
+.timer__dial {
+  position: relative;
+  width: 460u;
+  height: 460u;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+}
+
+.timer__ring {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.timer__arc {
+  transition: stroke-dashoffset 1s linear;
+}
+
+.timer__time {
+  position: relative;
+  display: flex;
+  align-items: baseline;
+  direction: ltr;
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 500;
+  font-size: 118u;
+  line-height: 1;
+  color: var(--ink);
+}
+
+.timer__colon {
+  margin: 0 2u;
+  transform: translateY(-8u);
+}
+
+.timer.is-running .timer__colon {
+  animation: blink 1s steps(1) infinite;
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0.25;
+  }
+}
+
+.timer__state {
+  position: absolute;
+  bottom: 96u;
+  left: 50%;
+  width: 34u;
+  height: 34u;
+  margin-left: -17u;
+  fill: var(--acc);
+}
+
+.timer.is-done .timer__time {
+  color: var(--acc);
+}
+
+.timer.is-done .timer__dial {
+  animation: timer-done 1.1s ease-in-out 3;
+}
+
+@keyframes timer-done {
+  50% {
+    transform: scale(1.04);
+  }
+}
+
+.timer__reset {
+  width: 56u;
+  height: 56u;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  color: var(--quiet);
+  opacity: 0;
+  transition: opacity 0.4s ease, color 0.3s ease;
+}
+
+.timer.is-touched .timer__reset {
+  opacity: 1;
+}
+
+.timer__reset:hover {
+  color: var(--ink);
+}
+
+.timer__reset svg {
+  width: 34u;
+  height: 34u;
+}
+
+/* ---------- The index (Esc) ---------- */
+.index {
+  position: absolute;
+  inset: 0;
+  overflow: auto;
+  direction: rtl;
+  background: #F3F5F4;
+  color: #222B25;
+  font-family: 'IBM Plex Sans Arabic', 'Segoe UI', Tahoma, sans-serif;
+  padding: clamp(20px, 4vw, 56px);
+}
+
+.index__head {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid rgba(12, 59, 64, 0.2);
+}
+
+.index__mark {
+  width: 64px;
+  height: 64px;
+  flex: none;
+}
+
+.index h1 {
+  margin: 0;
+  font: 700 clamp(26px, 3.4vw, 40px) / 1.25 'Readex Pro', sans-serif;
+  color: #0C3B40;
+}
+
+.index__hint {
+  margin: 4px 0 0;
+  font-size: 15px;
+  color: #5F6F70;
+}
+
+.index__hint kbd {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  padding: 1px 6px;
+  border: 1px solid rgba(12, 59, 64, 0.25);
+  border-radius: 5px;
+  background: #fff;
+}
+
+.index__grid {
+  margin-top: 26px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 22px 28px;
+}
+
+.index__part h2 {
+  margin: 0 0 8px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font: 600 18px/1.4 'Readex Pro', sans-serif;
+  color: var(--c);
+}
+
+.index__part h2::before {
+  content: '';
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--c);
+}
+
+.index__part ol {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 6px;
+}
+
+.index__part button {
+  width: 100%;
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  padding: 9px 14px;
+  border: 1px solid rgba(12, 59, 64, 0.16);
+  border-radius: 10px;
+  background: #fff;
+  font: inherit;
+  font-size: 16px;
+  color: inherit;
+  text-align: start;
+  cursor: pointer;
+  transition: border-color 0.2s ease, transform 0.2s ease;
+}
+
+.index__part button:hover {
+  border-color: var(--c);
+  transform: translateX(-3px);
+}
+
+.index__part button:focus-visible {
+  outline: 2px solid var(--c);
+  outline-offset: 2px;
+}
+
+.index__part button span:first-child {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 14px;
+  color: var(--c);
+  min-width: 22px;
+}

@@ -1,0 +1,818 @@
+/* Slides 11 to 21: كيف تكتب منشور يوصل، الخوارزمية والوصول */
+
+/* ---------- A post, drawn in the deck's own language (not any network's interface) ---------- */
+.post {
+  background: var(--sheet);
+  border: 2u solid var(--rule);
+  border-radius: 26u;
+  padding: 36u 44u 40u;
+}
+
+.post__head {
+  display: grid;
+  grid-template-columns: 76u 1fr;
+  column-gap: 22u;
+  row-gap: 12u;
+  align-items: center;
+  margin-bottom: 26u;
+}
+
+.post__ava {
+  grid-row: 1 / 3;
+  width: 76u;
+  height: 76u;
+  border-radius: 50%;
+  border: 2u solid var(--rule);
+  background: repeating-linear-gradient(45deg, rgba(12, 59, 64, 0.14) 0 3u, transparent 3u 11u);
+}
+
+.post__bar {
+  width: 240u;
+  height: 20u;
+  border-radius: 10u;
+  background: rgba(12, 59, 64, 0.2);
+  align-self: end;
+}
+
+.post__bar--soft {
+  width: 160u;
+  height: 16u;
+  background: rgba(12, 59, 64, 0.1);
+  align-self: start;
+}
+
+.post__body {
+  font-size: 44u;
+  font-weight: 500;
+  line-height: 1.6;
+}
+
+.greek {
+  display: inline-block;
+  width: calc(var(--n) * 0.46em);
+  height: 0.42em;
+  margin-inline-end: 0.4em;
+  border-radius: 0.21em;
+  background: rgba(12, 59, 64, 0.15);
+  vertical-align: middle;
+  animation: fade 0.5s ease both;
+}
+
+.deck .post__more {
+  font-weight: 600;
+  color: var(--acc);
+  white-space: nowrap;
+}
+
+/* ---------- 11 ---------- */
+.s11__post {
+  position: absolute;
+  right: 96u;
+  top: 300u;
+  transition: width 0.7s cubic-bezier(0.3, 0.8, 0.2, 1);
+}
+
+.s11__post.is-phone {
+  width: 720u;
+}
+
+.s11__post.is-laptop {
+  width: 1150u;
+}
+
+.s11__read {
+  position: absolute;
+  left: 96u;
+  top: 340u;
+  width: 480u;
+  display: grid;
+  justify-items: center;
+}
+
+.s11__toggle {
+  display: flex;
+  padding: 6u;
+  border: 2u solid var(--rule);
+  border-radius: 999u;
+}
+
+.deck .s11__toggle button {
+  padding: 10u 34u;
+  border-radius: 999u;
+  font-size: 34u;
+  font-weight: 500;
+  color: var(--soft);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.deck .s11__toggle button.is-on {
+  background: var(--acc);
+  color: #fff;
+}
+
+.s11__limit {
+  margin-top: 54u;
+  line-height: 1;
+}
+
+.s11__unit {
+  margin-top: 14u;
+  font-size: 46u;
+  font-weight: 500;
+  color: var(--soft);
+}
+
+/* ---------- 12 ---------- */
+.s12__list {
+  position: absolute;
+  right: 96u;
+  top: 300u;
+  width: 640u;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 20u;
+}
+
+.deck .s12__list button {
+  display: flex;
+  align-items: baseline;
+  gap: 26u;
+  border-radius: 12u;
+  font-size: 52u;
+  font-weight: 600;
+  line-height: 1.4;
+  color: var(--ink);
+  transition: color 0.3s ease, opacity 0.3s ease;
+}
+
+.s12__list .mono {
+  min-width: 30u;
+  font-size: 40u;
+  font-weight: 500;
+  color: var(--quiet);
+  transition: color 0.3s ease;
+}
+
+.deck .s12__list button.is-on,
+.s12__list button.is-on .mono {
+  color: var(--acc);
+}
+
+.deck .s12__list button.is-dim {
+  opacity: 0.45;
+}
+
+.s12__quote {
+  position: absolute;
+  left: 96u;
+  top: 364u;
+  width: 960u;
+  margin: 0;
+  padding-inline-start: 44u;
+  border-inline-start: 8u solid var(--acc);
+  animation: in 0.55s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+.s12__quote p {
+  font-size: 72u;
+  font-weight: 600;
+  line-height: 1.45;
+  color: var(--ink);
+}
+
+.s12__more {
+  display: block;
+  margin-top: 18u;
+  font-size: 44u;
+  font-weight: 600;
+  color: var(--acc);
+}
+
+/* ---------- 13 ---------- */
+.s13__dull {
+  color: var(--quiet);
+}
+
+.s13__tags {
+  position: absolute;
+  right: 96u;
+  top: 318u;
+}
+
+.s13__tag {
+  position: absolute;
+  right: 0;
+  top: 0;
+  padding: 4u 30u;
+  border: 2u solid var(--rule);
+  border-radius: 999u;
+  font-size: 34u;
+  font-weight: 500;
+  color: var(--quiet);
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.s13__tag.is-on {
+  opacity: 1;
+}
+
+.s13__tag--after {
+  color: #fff;
+  background: var(--acc);
+  border-color: var(--acc);
+}
+
+.s13__box {
+  position: absolute;
+  left: 96u;
+  right: 96u;
+  top: 430u;
+  height: 380u;
+  cursor: ew-resize;
+  touch-action: none;
+}
+
+.s13__before,
+.s13__after {
+  position: absolute;
+  inset: 0;
+  font-size: 80u;
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+.s13__before {
+  color: var(--quiet);
+}
+
+.s13__after {
+  color: var(--ink);
+  background: var(--ground);
+  transition: clip-path 0.9s cubic-bezier(0.3, 0.7, 0.2, 1);
+}
+
+.s13__grip {
+  position: absolute;
+  top: -30u;
+  bottom: -30u;
+  width: 4u;
+  margin-right: -2u;
+  background: var(--acc);
+  transition: right 0.9s cubic-bezier(0.3, 0.7, 0.2, 1);
+}
+
+.s13__grip:focus-visible {
+  outline: 3u solid var(--acc);
+  outline-offset: 6u;
+}
+
+.is-drag .s13__after,
+.is-drag .s13__grip {
+  transition: none;
+}
+
+.s13__grip svg {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 68u;
+  height: 68u;
+  margin: -34u 0 0 -34u;
+  padding: 14u;
+  border-radius: 50%;
+  background: var(--acc);
+  fill: none;
+  stroke: #fff;
+  stroke-width: 2.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.adj {
+  text-decoration: underline wavy rgba(95, 111, 112, 0.7);
+  text-decoration-thickness: 3u;
+  text-underline-offset: 16u;
+}
+
+.det {
+  padding-bottom: 4u;
+  background: linear-gradient(var(--acc), var(--acc)) no-repeat right bottom / 0% 7u;
+  transition: background-size 0.8s ease;
+}
+
+.is-marked .det {
+  background-size: 100% 7u;
+}
+
+/* ---------- 14 ---------- */
+.s14__card {
+  position: absolute;
+  right: 96u;
+  top: 286u;
+  width: 544u;
+  height: 660u;
+}
+
+.s14__block rect {
+  fill: rgba(12, 59, 64, 0.13);
+  transition: fill 0.4s ease;
+}
+
+.s14__block.is-seen rect {
+  fill: rgba(12, 59, 64, 0.3);
+}
+
+.s14__block.is-hot rect {
+  fill: var(--acc);
+}
+
+.s14__gaps path {
+  fill: none;
+  stroke: var(--acc);
+  stroke-width: 3;
+  stroke-linecap: round;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.is-gaps .s14__gaps path {
+  opacity: 1;
+}
+
+.is-gaps .s14__block rect {
+  fill: rgba(12, 59, 64, 0.3);
+}
+
+.s14__label {
+  position: absolute;
+  right: 700u;
+  display: flex;
+  align-items: baseline;
+  gap: 22u;
+  font-size: 60u;
+  font-weight: 600;
+  line-height: 1.45;
+  color: var(--quiet);
+  white-space: nowrap;
+}
+
+.s14__label.rv {
+  transition: opacity 0.55s ease, transform 0.6s cubic-bezier(0.2, 0.7, 0.2, 1), color 0.4s ease;
+}
+
+.s14__label.is-now,
+.is-gaps .s14__label {
+  color: var(--ink);
+}
+
+.s14__label .mono {
+  font-size: 44u;
+  font-weight: 500;
+  color: var(--acc);
+}
+
+.s14__label::after {
+  content: '';
+  position: absolute;
+  right: -52u;
+  top: 50%;
+  width: 40u;
+  height: 2u;
+  background: var(--rule);
+}
+
+.s14__note {
+  position: absolute;
+  right: 700u;
+  top: 900u;
+  font-size: 48u;
+  font-weight: 600;
+  color: var(--acc);
+}
+
+/* ---------- 15 ---------- */
+.s15__list {
+  margin: 0;
+  padding: 300u 96u 0;
+  list-style: none;
+  display: grid;
+  align-content: start;
+  gap: 30u;
+  font-size: 68u;
+  font-weight: 600;
+  line-height: 1.4;
+  color: var(--ink);
+}
+
+.s15__list li {
+  transition: color 0.5s ease 0.3s;
+}
+
+.s15__list li.is-out {
+  color: rgba(95, 111, 112, 0.6);
+}
+
+.s15__and {
+  font-weight: 400;
+}
+
+.s15__ph {
+  position: relative;
+  display: inline-block;
+  white-space: nowrap;
+}
+
+/* The ruling line that crosses a phrase out. */
+.s15__ph::after {
+  content: '';
+  position: absolute;
+  left: -10u;
+  right: -10u;
+  top: 58%;
+  height: 6u;
+  border-radius: 3u;
+  background: var(--acc);
+  transform: scaleX(0);
+  transform-origin: right center;
+  transition: transform 0.55s cubic-bezier(0.3, 0.7, 0.2, 1);
+  transition-delay: calc(var(--k) * 0.35s);
+}
+
+.s15__list li.is-out .s15__ph::after {
+  transform: scaleX(1);
+}
+
+.s15__say {
+  position: absolute;
+  left: 96u;
+  right: 96u;
+  top: 390u;
+  font-size: 88u;
+  font-weight: 700;
+  line-height: 1.4;
+  color: var(--ink);
+}
+
+/* ---------- 16 ---------- */
+.s16__list {
+  position: absolute;
+  left: 96u;
+  right: 96u;
+  top: 316u;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 54u;
+}
+
+.s16__list li {
+  display: grid;
+  grid-template-columns: 130u 1fr;
+  column-gap: 46u;
+  align-items: center;
+  font-size: 56u;
+  font-weight: 600;
+  line-height: 1.4;
+  color: var(--ink);
+}
+
+.s16__list svg {
+  width: 130u;
+  height: 130u;
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.s16__list svg .fill {
+  fill: var(--acc);
+  stroke: none;
+}
+
+/* ---------- 17 ---------- */
+.s17__map {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.s17__course {
+  fill: none;
+  stroke: rgba(12, 59, 64, 0.32);
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-dasharray: 3 14;
+}
+
+.s17__leg {
+  fill: none;
+  stroke: var(--acc);
+  stroke-width: 5;
+  stroke-linecap: round;
+  stroke-dasharray: 100;
+  stroke-dashoffset: 100;
+  transition: stroke-dashoffset 1s cubic-bezier(0.4, 0.1, 0.2, 1);
+}
+
+.s17__leg.is-on {
+  stroke-dashoffset: 0;
+}
+
+.s17__stop circle {
+  fill: var(--ground);
+  stroke: rgba(12, 59, 64, 0.35);
+  stroke-width: 3;
+  transition: fill 0.4s ease, stroke 0.4s ease;
+}
+
+.s17__stop text {
+  font: 500 40px 'IBM Plex Mono', monospace;
+  fill: #5F6F70;
+  transition: fill 0.4s ease;
+}
+
+.s17__stop.is-on circle {
+  stroke: var(--acc);
+}
+
+.s17__stop.is-on text {
+  fill: var(--acc);
+}
+
+.s17__stop.is-now circle {
+  fill: var(--acc);
+}
+
+.s17__stop.is-now text {
+  fill: #fff;
+}
+
+.s17__fan g {
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  transition-delay: calc(var(--d) * 1s);
+}
+
+.s17__fan.is-on g {
+  opacity: 1;
+}
+
+.s17__fan line {
+  stroke: var(--acc);
+  stroke-width: 2;
+  opacity: 0.5;
+}
+
+.s17__fan g circle {
+  fill: var(--acc);
+}
+
+.s17__net {
+  fill: none;
+  stroke: rgba(12, 59, 64, 0.38);
+  stroke-width: 2.5;
+  stroke-dasharray: 6 10;
+  opacity: 0;
+  transition: opacity 0.6s ease 0.5s;
+}
+
+.s17__fan.is-on .s17__net {
+  opacity: 1;
+}
+
+.s17__say {
+  position: absolute;
+  left: 96u;
+  right: 96u;
+  top: 650u;
+  font-size: 76u;
+  font-weight: 700;
+  line-height: 1.4;
+  color: var(--ink);
+}
+
+.s17__say--long {
+  top: 660u;
+  font-size: 58u;
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+.s17__asks {
+  position: absolute;
+  left: 96u;
+  right: 96u;
+  top: 792u;
+  display: flex;
+  gap: 26u;
+}
+
+.s17__asks span {
+  padding: 12u 32u;
+  border: 2u solid var(--acc);
+  border-radius: 18u;
+  background: var(--sheet);
+  font-size: 48u;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+/* ---------- 18 and 19 ---------- */
+.reach__rings {
+  position: absolute;
+  left: 150u;
+  top: 336u;
+  width: 600u;
+  height: 600u;
+}
+
+.reach__ring {
+  fill: none;
+  stroke: var(--acc);
+  stroke-width: 5;
+  stroke-linecap: round;
+  transform: rotate(-90deg);
+  transition: stroke-dashoffset 1s cubic-bezier(0.4, 0.1, 0.2, 1), stroke 0.6s ease, stroke-width 0.6s ease, opacity 0.6s ease;
+}
+
+.reach--up .reach__ring {
+  stroke-dasharray: 100;
+  stroke-dashoffset: 100;
+}
+
+.reach--up .reach__ring.is-on {
+  stroke-dashoffset: 0;
+}
+
+.reach--down .reach__ring {
+  stroke: rgba(12, 59, 64, 0.3);
+  stroke-width: 3;
+  stroke-dasharray: 0.9 2.4;
+}
+
+.reach--down .reach__ring.is-on {
+  stroke: var(--acc);
+  stroke-width: 5;
+  stroke-dasharray: 100 0;
+}
+
+.reach__post {
+  fill: var(--ink);
+}
+
+.reach__lines {
+  fill: none;
+  stroke: #fff;
+  stroke-width: 5;
+  stroke-linecap: round;
+}
+
+.reach__one {
+  position: absolute;
+  right: 96u;
+  top: 400u;
+  width: 940u;
+  animation: in 0.5s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+.reach__lead {
+  font-size: 92u;
+  font-weight: 700;
+  line-height: 1.3;
+  color: var(--ink);
+}
+
+.reach__rest {
+  margin-top: 18u;
+  font-size: 52u;
+  line-height: 1.5;
+}
+
+.reach__dots {
+  position: absolute;
+  right: 96u;
+  top: 318u;
+  display: flex;
+  gap: 14u;
+}
+
+.deck .reach__dots button {
+  width: 44u;
+  height: 12u;
+  border-radius: 6u;
+  background: rgba(12, 59, 64, 0.16);
+  transition: width 0.4s ease, background-color 0.4s ease;
+}
+
+.deck .reach__dots button.is-seen {
+  background: rgba(12, 59, 64, 0.45);
+}
+
+.deck .reach__dots button.is-on {
+  width: 76u;
+  background: var(--acc);
+}
+
+/* ---------- 20 ---------- */
+.s20__col {
+  position: absolute;
+  top: 326u;
+  width: 790u;
+}
+
+.s20__col--do {
+  right: 96u;
+}
+
+.s20__col--dont {
+  left: 96u;
+}
+
+.s20__head {
+  display: flex;
+  align-items: center;
+  gap: 18u;
+  margin-bottom: 30u;
+  font-size: 64u;
+  font-weight: 700;
+  color: var(--acc);
+}
+
+.s20__col--dont .s20__head {
+  color: var(--ink);
+}
+
+.s20__head svg {
+  width: 64u;
+  height: 64u;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.s20__item {
+  padding: 30u 0;
+  border-top: 2u solid var(--rule);
+  font-size: 52u;
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+/* ---------- 21 ---------- */
+.s21__say {
+  position: absolute;
+  left: 96u;
+  right: 96u;
+  top: 370u;
+  font-size: 84u;
+  font-weight: 700;
+  line-height: 1.4;
+  color: var(--ink);
+  animation: in 0.55s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+.s21__tape {
+  position: absolute;
+  left: 96u;
+  top: 730u;
+  width: 1728u;
+  height: 160u;
+  overflow: visible;
+}
+
+.s21__base,
+.s21__week {
+  fill: none;
+  stroke: rgba(12, 59, 64, 0.34);
+  stroke-width: 2.5;
+  stroke-linecap: round;
+}
+
+.s21__dot {
+  transform-box: fill-box;
+  transform-origin: center;
+  transition: transform 1s cubic-bezier(0.3, 0.9, 0.3, 1), opacity 0.5s ease, fill 0.5s ease;
+}
+
+.s21__dot--acc {
+  fill: var(--acc);
+}
+
+.s21__dot--ink {
+  fill: var(--ink);
+}
+
+.s21__dot--quiet {
+  fill: rgba(12, 59, 64, 0.38);
+}
