@@ -387,6 +387,8 @@ const SCREEN = [
 function Pin({ n, x, y, on, onPick }) {
   return (
     <g className={cx('pin', on && 'is-on')} transform={`translate(${x} ${y})`} onClick={onPick} role="button" aria-label={`${n}: ${SCREEN[n - 1][0]}`} data-hold>
+      {/* An unseen wider disc: on a phone the pin itself is too small to tap. */}
+      <circle className="pin__reach" r="40" />
       <circle r="22" />
       <text y="8" textAnchor="middle">
         {n}

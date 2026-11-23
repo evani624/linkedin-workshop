@@ -710,7 +710,12 @@
   cursor: pointer;
 }
 
-.pin circle {
+.pin .pin__reach {
+  fill: transparent;
+  stroke: none;
+}
+
+.pin circle:not(.pin__reach) {
   fill: #fff;
   stroke: rgba(12, 59, 64, 0.4);
   stroke-width: 2.5;
@@ -721,7 +726,7 @@
   fill: #46524C;
 }
 
-.pin.is-on circle {
+.pin.is-on circle:not(.pin__reach) {
   fill: var(--acc);
   stroke: var(--acc);
 }

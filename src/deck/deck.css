@@ -404,6 +404,68 @@
   height: 34u;
 }
 
+/* ---------- Touch screens: small controls keep their look and get a bigger area to tap ---------- */
+@media (pointer: coarse) {
+  .deck .reach__dots button,
+  .deck .game__dots button,
+  .deck .s26__dots button,
+  .deck .tally__tools button,
+  .deck .s11__toggle button,
+  .deck .timer__reset {
+    position: relative;
+  }
+
+  .deck .reach__dots button::after,
+  .deck .game__dots button::after,
+  .deck .s26__dots button::after,
+  .deck .tally__tools button::after,
+  .deck .s11__toggle button::after,
+  .deck .timer__reset::after,
+  .deck .rose__way::after {
+    content: '';
+    position: absolute;
+    /* Grows to 44px where the control is smaller than that; never shrinks it. */
+    inset: min(0px, calc((100% - 44px) / 2));
+  }
+
+  /* Neighbours in a row: on a small screen they move apart until each is 26px from the next,
+     and they share the gap between them instead of overlapping. */
+  .deck .reach__dots {
+    --gap: max(14u, calc(26px - 44u));
+  }
+
+  .deck .s26__dots {
+    --gap: max(12u, calc(26px - 44u));
+  }
+
+  .deck .game__dots {
+    --gap: max(12u, calc(26px - 14u));
+  }
+
+  .deck .tally__tools {
+    --gap: max(14u, calc(26px - 64u));
+  }
+
+  .deck .reach__dots,
+  .deck .s26__dots,
+  .deck .game__dots,
+  .deck .tally__tools {
+    gap: var(--gap);
+  }
+
+  .deck .reach__dots button::after,
+  .deck .game__dots button::after,
+  .deck .s26__dots button::after,
+  .deck .tally__tools button::after {
+    inset-inline: calc(var(--gap) / -2);
+  }
+
+  /* The reset button sits right under the countdown: grow downwards and sideways only. */
+  .deck .timer__reset::after {
+    inset-block: -8u min(0px, calc(100% - 40px));
+  }
+}
+
 /* ---------- The index (Esc) ---------- */
 .index {
   position: absolute;
@@ -414,6 +476,10 @@
   color: #222B25;
   font-family: 'IBM Plex Sans Arabic', 'Segoe UI', Tahoma, sans-serif;
   padding: clamp(20px, 4vw, 56px);
+  padding: max(clamp(20px, 4vw, 56px), env(safe-area-inset-top, 0px)) max(clamp(20px, 4vw, 56px), env(safe-area-inset-right, 0px))
+    max(clamp(20px, 4vw, 56px), env(safe-area-inset-bottom, 0px)) max(clamp(20px, 4vw, 56px), env(safe-area-inset-left, 0px));
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
 }
 
 .index__head {
